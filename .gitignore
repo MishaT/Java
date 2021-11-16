@@ -1,6 +1,7 @@
-*.class
-
-# Package Files #
-*.jar
-*.war
-*.ear
+/bin/
+/target/
+.classpath
+.project
+.dbeaver*
+.settings
+.gitignore

@@ -11,10 +11,9 @@ import java.sql.Statement;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-
 public class DataOpener {
 
-    private static final String DB_URL = "jdbc:postgresql://localhost:5432/university";
+    private static final String DB_URL = "jdbc:postgresql://lggram:5432/university";
     private static final String DB_USER = "teacher";
     private static final String DB_PASSWORD = "teacher";
     private static final String DB_DRIVER = "org.postgresql.Driver";
@@ -43,6 +42,7 @@ public class DataOpener {
 
     public static void main(String[] args)  {
 
+        //--- direct connect -------
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(DB_DRIVER);
         dataSource.setUrl(DB_URL);
@@ -53,17 +53,19 @@ public class DataOpener {
         String groupName = null;
 
         groupName = jdbcTemplate.queryForObject("SELECT name FROM Rooms WHERE id = ?", String.class, 6);
-        System.out.println(groupName);
+        System.out.println("groupName (6) = " + groupName);
 
+        //--- getConnection -------
         JdbcTemplate connection;
         try {
             connection = UniversityConnection.getConnection();
-            System.out.println(connection.queryForObject(SQL_GET_ROOM, String.class, 5));
+            System.out.println("groupName (5) = " + connection.queryForObject(SQL_GET_ROOM, String.class, 5));
         } catch (IOException e) {
+            System.out.println("DB failure: " + e.getMessage());
             e.printStackTrace();
         }
 
-
+        //--- H2 connection ------
         try (Connection db = DriverManager.getConnection("jdbc:h2:mem:")) {
             try (Statement qry = db.createStatement() ) {
                 qry.execute(SQL_CREATE_COURSES);
@@ -79,7 +81,7 @@ public class DataOpener {
             }
 
         } catch (SQLException e) {
-            System.out.println("DB failure: " + e.getMessage());
+            System.out.println("H2 DB failure: " + e.getMessage());
             e.printStackTrace();
         }
     }

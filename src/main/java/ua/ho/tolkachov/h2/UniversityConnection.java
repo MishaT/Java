@@ -45,6 +45,7 @@ public class UniversityConnection {
         System.out.println("------------------------------");
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        System.out.println("----------- new DriverManagerDataSource -------------------");
         dataSource.setDriverClassName(driver);
         dataSource.setUrl(dbUrl);
         dataSource.setUsername(username);
